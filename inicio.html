@@ -32,7 +32,13 @@
       </div>
     </section>
 
-    <script src="logicaDrag.js"></script>
+<script src="logicaDrag.js"></script>
+
+<!-- carrega OpenCV primeiro, para garantir que 'cv' existe -->
+<script async src="https://docs.opencv.org/4.5.5/opencv.js"></script>
+
+<!-- só depois disso, carrega seu código que usa 'cv' -->
+<script src="detectarErros.js"></script>
 
     <script>
       Module = {
@@ -42,7 +48,5 @@
         }
       };
     </script>
-    <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
-    <script src="detectarErros.js"></script>
   </body>
 </html>
