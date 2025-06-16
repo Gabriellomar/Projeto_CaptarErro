@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projeto Capta Erros</title>
+    <link rel="stylesheet" href="estilizacao.css" />
+  </head>
+  <body>
+    <section>
+      <h1>Projeto Capta Erros.</h1>
+
+      <div id="upload-area">
+        <label for="fileInput" class="custom-file-upload">Escolher Imagem</label>
+        <input type="file" id="fileInput" accept="image/*" />
+      </div>
+
+      <div id="preview">Nenhuma imagem selecionada.</div>
+
+      <button id="analyze">Detectar Erros</button>
+      <div id="result">Resultado</div>
+
+      <div id="Formato">
+        <label for="formato1">
+          Formato 1
+          <input type="radio" name="formato" id="formato1" class="formatos" checked />
+        </label>
+        <label for="formato2">
+          Formato 2
+          <input type="radio" name="formato" id="formato2" class="formatos" />
+        </label>
+      </div>
+    </section>
+
+    <script src="logicaDrag.js"></script>
+
+    <script>
+      Module = {
+        onRuntimeInitialized() {
+          console.log("✅ OpenCV carregado com sucesso!");
+          prepararAnalise();
+        }
+      };
+    </script>
+    <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+    <script src="detectarErros.js"></script>
+  </body>
+</html>
