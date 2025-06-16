@@ -19,6 +19,8 @@
 
       <button id="analyze">Detectar Erros</button>
       <div id="result">Resultado</div>
+      <button id="copiarEmail">Copiar texto do e-mail</button>
+
 
       <div id="Formato">
         <label for="formato1">
@@ -34,19 +36,28 @@
 
 <script src="logicaDrag.js"></script>
 
-<!-- carrega OpenCV primeiro, para garantir que 'cv' existe -->
-<script async src="https://docs.opencv.org/4.5.5/opencv.js"></script>
-
-<!-- só depois disso, carrega seu código que usa 'cv' -->
-<script src="detectarErros.js"></script>
-
-    <script>
-      Module = {
-        onRuntimeInitialized() {
-          console.log("✅ OpenCV carregado com sucesso!");
-          prepararAnalise();
+<!-- Define o módulo ANTES do OpenCV -->
+<script>
+  Module = {
+    onRuntimeInitialized() {
+      console.log("✅ OpenCV carregado com sucesso!");
+      // Só carrega o script principal depois que o OpenCV estiver pronto
+      const script = document.createElement("script");
+      script.src = "detectarErros.js";
+      script.onload = () => {
+        if (typeof prepararAnalise === "function") {
+          prepararAnalise(); // Só chama se a função estiver realmente carregada
+        } else {
+          console.error("❌ prepararAnalise() não foi carregada.");
         }
       };
-    </script>
+      document.body.appendChild(script);
+    }
+  };
+</script>
+
+<!-- Carrega o OpenCV por último -->
+<script async src="https://docs.opencv.org/4.5.5/opencv.js"></script>
+
   </body>
 </html>

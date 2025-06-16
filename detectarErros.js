@@ -1,20 +1,17 @@
 function prepararAnalise() {
-    const botao = document.getElementById("analyze");
-    botao.addEventListener("click", analisarImagem);
-  }
-  
+  const botao = document.getElementById("analyze");
+  botao.addEventListener("click", analisarImagem);
+}
+
 function analisarImagem() {
   const resultado = document.getElementById("result");
   resultado.innerHTML = "Analisando...";
 
- const img = document.getElementById("imagemPreview");
-
-if (!img || !img.complete) {
-  resultado.innerHTML = "Nenhuma imagem foi carregada corretamente.";
-  return;
-}
-}
-
+  const img = document.getElementById("imagemPreview");
+  if (!img || !img.complete) {
+    resultado.innerHTML = "Nenhuma imagem foi carregada corretamente.";
+    return;
+  }
 
   let imagemOriginal = cv.imread("imagemPreview");
   let imagemHSV = new cv.Mat();
@@ -50,7 +47,6 @@ if (!img || !img.complete) {
     let y = ret.y;
     let x = ret.x;
 
-    // Simula a nota com base na posição vertical
     let numeroNota = 14493 + Math.floor(y / 30);
     let tipo = x < 200 ? "Origem" : x < 400 ? "ICMS" : "Número";
 
@@ -62,23 +58,26 @@ if (!img || !img.complete) {
     }
   }
 
-  // Gera o texto formatado com base no formato escolhido
   const mensagemFinal = gerarMensagemFormatada(errosPorLinha, errosPorColuna);
   resultado.innerText = mensagemFinal;
 
-  // Liberação de memória
+  // ✨ Aplica a formatação visual apenas ao resultado textual do e-mail
+  resultado.className = "email-preview";
+
+  // Libera memória
   imagemOriginal.delete(); imagemHSV.delete(); mascara1.delete(); mascara2.delete();
   vermelhoClaro.delete(); vermelhoEscuro.delete(); vermelhoClaro2.delete(); vermelhoEscuro2.delete();
   mascaraFinal.delete(); contornos.delete(); hierarquia.delete();
+}
 
 
-  //--------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------
 
-  function gerarMensagemFormatada(errosPorLinha, errosPorColuna) {
+// Fora da função principal para reutilização
+function gerarMensagemFormatada(errosPorLinha, errosPorColuna) {
   const formato1Selecionado = document.getElementById("formato1").checked;
 
   if (formato1Selecionado) {
-    // Formato 1 - Resumo geral
     let linhas = ["Prezados, bom dia."];
     linhas.push("Identificamos os seguintes erros nas notas fiscais processadas:");
     for (const tipo in errosPorColuna) {
@@ -90,7 +89,6 @@ if (!img || !img.complete) {
     linhas.push("Gentileza revisar os dados enviados.");
     return linhas.join("\n");
   } else {
-    // Formato 2 - Detalhado por nota
     let linhas = ["Prezados, bom dia."];
     linhas.push("Segue detalhamento das notas com inconsistências:");
     for (const nota in errosPorLinha) {
@@ -108,3 +106,24 @@ if (!img || !img.complete) {
     return linhas.join("\n");
   }
 }
+
+//----------------------------------------------------------------------------------------------
+
+document.getElementById("copiarEmail").addEventListener("click", () => {
+  const resultado = document.getElementById("result");
+  const texto = resultado.innerText;
+
+  if (!texto || texto === "Resultado" || texto === "Analisando...") {
+    alert("Nenhum texto disponível para copiar.");
+    return;
+  }
+
+  navigator.clipboard.writeText(texto)
+    .then(() => {
+      alert("Texto copiado para a área de transferência!");
+    })
+    .catch(err => {
+      console.error("Erro ao copiar o texto:", err);
+      alert("Erro ao copiar. Tente novamente.");
+    });
+});
