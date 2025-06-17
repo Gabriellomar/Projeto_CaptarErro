@@ -81,8 +81,7 @@ function analisarImagem() {
         break;
       }
     }
-    if (!tipo) continue; // ignora se não encontrar erro válido
-
+    if (!tipo) continue; 
     if (!errosPorLinha[numeroNota]) errosPorLinha[numeroNota] = [];
     errosPorLinha[numeroNota].push(tipo);
 

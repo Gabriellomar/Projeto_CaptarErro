@@ -176,3 +176,22 @@ label {
   max-height: 1000px;
   line-height: 1.4;
 }
+
+#botaoLimpar{
+  display: none;
+}
+.botaoLimpaArea{
+  display: block;
+  width: 70px;
+  height: 25px;
+  border: 1px solid black;
+  background-color: rgb(238, 221, 201);
+  margin: auto;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 3px;
+}
+.botaoLimpaArea:hover{
+  background-color: rgb(243, 200, 147);
+  transition: 0.3s;
+}

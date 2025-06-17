@@ -41,3 +41,12 @@ function prepararAnaliseTexto() {
     resultado.className = "email-preview";
   });
 }
+
+//---------------------------------------------------------------------------------
+
+let limpa = document.getElementById("botaoLimpar");
+limpa.addEventListener("click", () => {
+  document.getElementById("campoTexto").value = "";
+  document.getElementById("result").innerText = "";
+  document.getElementById("result").className = "";
+});
