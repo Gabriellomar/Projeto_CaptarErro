@@ -36,9 +36,6 @@ function analisarImagem() {
   let hierarquia = new cv.Mat();
   cv.findContours(mascaraFinal, contornos, hierarquia, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
-  let errosPorLinha = {};
-  let errosPorColuna = {};
-
   const mapaErros = {
     "CNPJ/PLANTA": 100,
     "CNPJ FORN": 150,
@@ -59,21 +56,28 @@ function analisarImagem() {
     "ST": 900
   };
 
+  const posicaoNFColuna = 30; // posição horizontal estimada da coluna NF-e
   const toleranciaX = 30;
-  const pontosJaContados = [];
+  const alturaLinha = 30;
+
+  let errosPorLinha = {};
+  let errosPorColuna = {};
+  let pontosJaContados = [];
 
   for (let i = 0; i < contornos.size(); i++) {
-    let ret = cv.boundingRect(contornos.get(i));
-    let y = ret.y;
-    let x = ret.x;
+    const ret = cv.boundingRect(contornos.get(i));
+    const x = ret.x;
+    const y = ret.y;
 
-    // Verifica se já existe um ponto muito próximo que foi contado
-    let pontoProximo = pontosJaContados.some(p => Math.abs(p.x - x) < 10 && Math.abs(p.y - y) < 10);
-    if (pontoProximo) continue;
+    // Ignora pontos já muito próximos
+    if (pontosJaContados.some(p => Math.abs(p.x - x) < 10 && Math.abs(p.y - y) < 10)) continue;
     pontosJaContados.push({ x, y });
 
-    let numeroNota = 14493 + Math.floor(y / 30);
+    // Estimar número da linha
+    const linhaIndex = Math.floor((y - 120) / alturaLinha); // ajusta se necessário
+    const numeroNota = 18000 + linhaIndex;
 
+    // Identificar tipo de erro
     let tipo = null;
     for (const [nomeErro, posX] of Object.entries(mapaErros)) {
       if (Math.abs(x - posX) <= toleranciaX) {
@@ -81,13 +85,12 @@ function analisarImagem() {
         break;
       }
     }
-    if (!tipo) continue; 
+    if (!tipo) continue;
+
     if (!errosPorLinha[numeroNota]) errosPorLinha[numeroNota] = [];
     errosPorLinha[numeroNota].push(tipo);
 
-    if (!errosPorColuna[tipo]) {
-      errosPorColuna[tipo] = 0;
-    }
+    if (!errosPorColuna[tipo]) errosPorColuna[tipo] = 0;
     errosPorColuna[tipo]++;
   }
 
@@ -123,7 +126,14 @@ function gerarMensagemFormatada(errosPorLinha, errosPorColuna) {
   const formato1Selecionado = document.getElementById("formato1").checked;
 
   if (formato1Selecionado) {
-    let linhas = ["Prezados, bom dia."];
+    // Soma total de erros
+    const totalErros = Object.values(errosPorColuna).reduce((a, b) => a + b, 0);
+    if (totalErros === 0) {
+      // Se souber os números das notas, pode listar aqui. Exemplo:
+      const notas = Object.keys(errosPorLinha);
+      return `Prezados, ${momentoDoDia}\nAs notas fiscais de número ${notas.join(', ')} foram verificadas e liberadas.`;
+    }
+    let linhas = [`Prezados, ${momentoDoDia}`];
     linhas.push("Identificamos os seguintes erros nas notas fiscais processadas:");
     for (const tipo in errosPorColuna) {
       const total = errosPorColuna[tipo];
@@ -134,10 +144,28 @@ function gerarMensagemFormatada(errosPorLinha, errosPorColuna) {
     linhas.push("Gentileza revisar os dados enviados.");
     return linhas.join("\n");
   } else {
+    // Verifica quais notas não têm erro
+    let notasSemErro = [];
+    let temErro = false;
+    for (const nota in errosPorLinha) {
+      if (errosPorLinha[nota] && errosPorLinha[nota].length > 0) {
+        temErro = true;
+      } else {
+        notasSemErro.push(nota);
+      }
+    }
+    if (!temErro) {
+      // Todas as notas estão sem erro
+      return `Prezados, ${momentoDoDia}.\nAs notas fiscais de número ${notasSemErro.join(', ')} foram verificadas e liberadas.`;
+    }
     let linhas = [`Prezados, ${momentoDoDia}`];
+    if (notasSemErro.length > 0) {
+      linhas.push(`As notas fiscais de número ${notasSemErro.join(', ')} foram verificadas e liberadas.`);
+    }
     linhas.push("Segue detalhamento das notas com inconsistências:");
     for (const nota in errosPorLinha) {
       const erros = errosPorLinha[nota];
+      if (erros.length === 0) continue;
       linhas.push(`- Nota ${nota}:`);
       const contagem = {};
       erros.forEach(tipo => {
@@ -151,6 +179,7 @@ function gerarMensagemFormatada(errosPorLinha, errosPorColuna) {
     return linhas.join("\n");
   }
 }
+// ...existing code...
 
 //----------------------------------------------------------------------------------------------
 

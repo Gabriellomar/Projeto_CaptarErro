@@ -60,3 +60,18 @@ areaPreview.addEventListener("drop", (evento) => {
     carregarImagem(arquivo);
   }
 });
+
+
+//-------------------------------------------------------------------------------------------------
+
+document.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    if (this.target === "_blank") return; // não aplica em links externos
+    e.preventDefault();
+    document.body.style.transition = "opacity 0.5s";
+    document.body.style.opacity = 0;
+    setTimeout(() => {
+      window.location = this.href;
+    }, 500);
+  });
+});

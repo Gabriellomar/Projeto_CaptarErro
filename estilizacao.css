@@ -106,6 +106,7 @@ label {
 #copiarEmail:hover {
   background-color: #0056b3;
   color: white;
+  transition: 0.3s;
 }
 
 /* Toggle container */
@@ -194,4 +195,50 @@ label {
 .botaoLimpaArea:hover{
   background-color: rgb(243, 200, 147);
   transition: 0.3s;
+}
+#divNavegacao {
+  position: absolute;
+  z-index: 1000;
+  margin-top: 10px;
+}
+#menu {
+  display: flex;
+  gap: 10px; /* Espaço entre os itens */
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+#menu li {
+  list-style: none;
+  padding: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    background 0.4s cubic-bezier(.4,0,.2,1),
+    color 0.4s cubic-bezier(.4,0,.2,1),
+    box-shadow 0.4s cubic-bezier(.4,0,.2,1),
+    transform 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+#menu li a {
+  display: block;
+  padding: 10px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: inherit;
+}
+
+#menu li:hover a {
+  background: linear-gradient(90deg, #072030 0%, #73732a 50%, #072030 100%);
+  color: #fff;
+  box-shadow: 0 4px 24px rgba(7,32,48,0.15);
+  transform: scale(1.06);
+}
+body {
+  opacity: 1;
+  transition: opacity 0.5s;
 }
