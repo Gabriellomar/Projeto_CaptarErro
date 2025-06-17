@@ -242,3 +242,31 @@ body {
   opacity: 1;
   transition: opacity 0.5s;
 }
+.resultado-container {
+  position: relative;   
+  display: inline-block;  
+}
+
+.resultado-container #result {
+  display: block;
+  width: 100%;
+}
+
+#enviarBanco {
+  position: absolute;
+  bottom: 40px;               
+  left: 100%;          
+  margin-left: 12px;     
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: rgb(243, 200, 147);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  z-index: 10;           
+}
+#enviarBanco:hover {
+  background-color: #0056b3;
+  color: white;
+  transition: 0.3s;
+}
