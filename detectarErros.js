@@ -106,7 +106,20 @@ function analisarImagem() {
 
 //------------------------------------------------------------------------------------------------------
 
-// Fora da função principal para reutilização
+const dataAtual = new Date();
+const horas = dataAtual.getHours();
+let momentoDoDia;
+
+if(horas > 0 && horas < 12){
+  momentoDoDia = "bom dia."
+} else if (horas > 12 && horas < 18){
+  momentoDoDia= "boa tarde."
+} else if (horas > 18 && horas < 24){
+  momentoDoDia = "boa noite."
+}
+
+//------------------------------------------------------------------------------------------------------
+
 function gerarMensagemFormatada(errosPorLinha, errosPorColuna) {
   const formato1Selecionado = document.getElementById("formato1").checked;
 
@@ -122,7 +135,7 @@ function gerarMensagemFormatada(errosPorLinha, errosPorColuna) {
     linhas.push("Gentileza revisar os dados enviados.");
     return linhas.join("\n");
   } else {
-    let linhas = ["Prezados, bom dia."];
+    let linhas = [`Prezados, ${momentoDoDia}`];
     linhas.push("Segue detalhamento das notas com inconsistências:");
     for (const nota in errosPorLinha) {
       const erros = errosPorLinha[nota];
