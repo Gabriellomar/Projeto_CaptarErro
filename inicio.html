@@ -10,17 +10,25 @@
     <section>
       <h1>Projeto Capta Erros.</h1>
 
+      <div class="modo-toggle-container">
+        <label class="switch">
+          <input type="checkbox" id="modoToggle">
+          <span class="slider round"></span>
+        </label>
+        <p id="toggleLabel">Usar modo texto</p>
+      </div>
+
       <div id="upload-area">
         <label for="fileInput" class="custom-file-upload">Escolher Imagem</label>
         <input type="file" id="fileInput" accept="image/*" />
       </div>
 
       <div id="preview">Nenhuma imagem selecionada.</div>
+      <textarea id="campoTexto" placeholder="Cole aqui a tabela copiada do Excel..." style="display:none"></textarea>
 
       <button id="analyze">Detectar Erros</button>
       <div id="result">Resultado</div>
       <button id="copiarEmail">Copiar texto do e-mail</button>
-
 
       <div id="Formato">
         <label for="formato1">
@@ -34,30 +42,71 @@
       </div>
     </section>
 
-<script src="logicaDrag.js"></script>
+    <script src="logicaDrag.js"></script>
 
-<!-- Define o módulo ANTES do OpenCV -->
-<script>
-  Module = {
-    onRuntimeInitialized() {
-      console.log("✅ OpenCV carregado com sucesso!");
-      // Só carrega o script principal depois que o OpenCV estiver pronto
-      const script = document.createElement("script");
-      script.src = "detectarErros.js";
-      script.onload = () => {
-        if (typeof prepararAnalise === "function") {
-          prepararAnalise(); // Só chama se a função estiver realmente carregada
+    <script>
+      const toggle = document.getElementById("modoToggle");
+      const label = document.getElementById("toggleLabel");
+      const areaUpload = document.getElementById("upload-area");
+      const preview = document.getElementById("preview");
+      const campoTexto = document.getElementById("campoTexto");
+      const analyzeBtn = document.getElementById("analyze");
+
+      let modoTextoAtivo = false;
+
+      function limparEventosBotaoAnalyze() {
+        const novoBtn = analyzeBtn.cloneNode(true);
+        analyzeBtn.parentNode.replaceChild(novoBtn, analyzeBtn);
+        return novoBtn;
+      }
+
+      toggle.addEventListener("change", () => {
+        if (toggle.checked) {
+          // Modo TEXTO ativado
+          label.textContent = "Usar modo imagem";
+          areaUpload.style.display = "none";
+          preview.style.display = "none";
+          campoTexto.style.display = "block";
+
+          modoTextoAtivo = true;
+          const novoBotao = limparEventosBotaoAnalyze();
+          if (typeof prepararAnaliseTexto === "function") {
+            prepararAnaliseTexto(novoBotao);
+          }
         } else {
-          console.error("❌ prepararAnalise() não foi carregada.");
+          // Modo IMAGEM ativado
+          label.textContent = "Usar modo texto";
+          areaUpload.style.display = "block";
+          preview.style.display = "flex";
+          campoTexto.style.display = "none";
+
+          modoTextoAtivo = false;
+          const novoBotao = limparEventosBotaoAnalyze();
+          if (typeof prepararAnalise === "function") {
+            prepararAnalise(novoBotao);
+          }
+        }
+      });
+
+      // OpenCV para modo imagem
+      Module = {
+        onRuntimeInitialized() {
+          console.log("✅ OpenCV carregado com sucesso!");
+          const script = document.createElement("script");
+          script.src = "detectarErros.js";
+          script.onload = () => {
+            if (typeof prepararAnalise === "function") {
+              prepararAnalise(document.getElementById("analyze"));
+            } else {
+              console.error("❌ prepararAnalise() não foi carregada.");
+            }
+          };
+          document.body.appendChild(script);
         }
       };
-      document.body.appendChild(script);
-    }
-  };
-</script>
+    </script>
 
-<!-- Carrega o OpenCV por último -->
-<script async src="https://docs.opencv.org/4.5.5/opencv.js"></script>
-
+    <script src="detectarErrosTexto.js"></script>
+    <script async src="https://docs.opencv.org/4.5.5/opencv.js"></script>
   </body>
 </html>

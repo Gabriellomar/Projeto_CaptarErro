@@ -6,6 +6,7 @@ function prepararAnalise() {
 function analisarImagem() {
   const resultado = document.getElementById("result");
   resultado.innerHTML = "Analisando...";
+  resultado.className = "";
 
   const img = document.getElementById("imagemPreview");
   if (!img || !img.complete) {
@@ -36,39 +37,71 @@ function analisarImagem() {
   cv.findContours(mascaraFinal, contornos, hierarquia, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
   let errosPorLinha = {};
-  let errosPorColuna = {
-    "Origem": 0,
-    "ICMS": 0,
-    "Número": 0
+  let errosPorColuna = {};
+
+  const mapaErros = {
+    "CNPJ/PLANTA": 100,
+    "CNPJ FORN": 150,
+    "PO CONFIRMADO": 200,
+    "TAX CODE": 250,
+    "MAT_TYPE": 300,
+    "NCM": 350,
+    "Origem": 400,
+    "QTD": 450,
+    "Vr Unitário": 500,
+    "Vr Total": 550,
+    "IPI": 600,
+    "ICMS": 650,
+    "BC ICMS": 700,
+    "Red BC ICMS": 750,
+    "DIFERIDO": 800,
+    "BC ST": 850,
+    "ST": 900
   };
+
+  const toleranciaX = 30;
+  const pontosJaContados = [];
 
   for (let i = 0; i < contornos.size(); i++) {
     let ret = cv.boundingRect(contornos.get(i));
     let y = ret.y;
     let x = ret.x;
 
+    // Verifica se já existe um ponto muito próximo que foi contado
+    let pontoProximo = pontosJaContados.some(p => Math.abs(p.x - x) < 10 && Math.abs(p.y - y) < 10);
+    if (pontoProximo) continue;
+    pontosJaContados.push({ x, y });
+
     let numeroNota = 14493 + Math.floor(y / 30);
-    let tipo = x < 200 ? "Origem" : x < 400 ? "ICMS" : "Número";
+
+    let tipo = null;
+    for (const [nomeErro, posX] of Object.entries(mapaErros)) {
+      if (Math.abs(x - posX) <= toleranciaX) {
+        tipo = nomeErro;
+        break;
+      }
+    }
+    if (!tipo) continue; // ignora se não encontrar erro válido
 
     if (!errosPorLinha[numeroNota]) errosPorLinha[numeroNota] = [];
     errosPorLinha[numeroNota].push(tipo);
 
-    if (errosPorColuna[tipo] !== undefined) {
-      errosPorColuna[tipo]++;
+    if (!errosPorColuna[tipo]) {
+      errosPorColuna[tipo] = 0;
     }
+    errosPorColuna[tipo]++;
   }
 
   const mensagemFinal = gerarMensagemFormatada(errosPorLinha, errosPorColuna);
   resultado.innerText = mensagemFinal;
-
-  // ✨ Aplica a formatação visual apenas ao resultado textual do e-mail
   resultado.className = "email-preview";
 
-  // Libera memória
   imagemOriginal.delete(); imagemHSV.delete(); mascara1.delete(); mascara2.delete();
   vermelhoClaro.delete(); vermelhoEscuro.delete(); vermelhoClaro2.delete(); vermelhoEscuro2.delete();
   mascaraFinal.delete(); contornos.delete(); hierarquia.delete();
 }
+
+
 
 
 //------------------------------------------------------------------------------------------------------
