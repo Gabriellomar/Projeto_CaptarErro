@@ -1,31 +1,28 @@
+/* estilizacao2.css */
+
+/* Reset básico e fundo */
 * {
+  margin: 0;
+  margin-top: 10px;
+  padding: 0;
+  box-sizing: border-box;
   background-color: rgb(238, 221, 201);
 }
+
+/* Navegação */
 #divNavegacao {
   position: absolute;
   z-index: 1000;
-  margin-top: 10px;
+  margin-top: -30px;
+  margin-left: 15px;
 }
 #menu {
   display: flex;
-  gap: 10px; /* Espaço entre os itens */
-  padding: 0;
-  margin: 0;
-  align-items: center;
-}
-#menu li {
+  gap: 10px;
   list-style: none;
   padding: 0;
-  border-radius: 8px;
-  cursor: pointer;
-  overflow: hidden;
-  transition:
-    background 0.4s cubic-bezier(.4,0,.2,1),
-    color 0.4s cubic-bezier(.4,0,.2,1),
-    box-shadow 0.4s cubic-bezier(.4,0,.2,1),
-    transform 0.3s cubic-bezier(.4,0,.2,1);
+  margin: 0;
 }
-
 #menu li a {
   display: block;
   padding: 10px 24px;
@@ -33,25 +30,125 @@
   text-decoration: none;
   color: inherit;
   font-weight: 500;
-  font-size: 1rem;
-  transition: inherit;
+  transition: background 0.4s, color 0.4s, box-shadow 0.4s, transform 0.3s;
 }
-
 #menu li:hover a {
   background: linear-gradient(90deg, #072030 0%, #73732a 50%, #072030 100%);
   color: #fff;
   box-shadow: 0 4px 24px rgba(7,32,48,0.15);
   transform: scale(1.06);
 }
-body {
-  opacity: 1;
-  transition: opacity 0.5s;
-}
+
+/* Layout da seção */
+/* Margin-top ajustada para ficar igual ao primeiro HTML */
 section {
   width: 700px;
-  margin: auto;
+  margin: 10px auto 40px;   /* 10px topo, igual primeiro */
   display: flex;
   flex-direction: column;
+  align-items: center;
   text-align: center;
-  
+}
+section > h1 {
+  margin-bottom: 24px;      /* mais respiro abaixo do título */
+}
+
+/* Container dos uploads */
+.xml-upload {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;                /* mais espaço lateral entre zonas */
+  width: 100%;
+  margin-bottom: 32px;      /* folga antes do botão */
+}
+
+/* Cada zona de upload */
+.drag-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Oculta o input file nativo para não mostrar "Nenhum arquivo escolhido" */
+.drag-container input[type="file"] {
+  display: none !important;
+}
+
+/* Label customizado para input */
+.custom-file-upload {
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  background-color: #eee;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 12px;      /* espaço abaixo do label */
+  position: relative;
+  font-style: italic;
+  color: rgb(71, 71, 71);
+}
+.custom-file-upload input {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Área de drag-and-drop */
+.drag-area {
+  width: 100%;
+  max-width: 300px;
+  height: 120px;
+  border: 2px dashed #aaa;
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: gray;
+  font-style: italic;
+  padding: 8px;
+  margin-bottom: 32px;      /* folga abaixo do drag-area */
+}
+
+/* Botão “Comparar XMLs” */
+#compararXml {
+  width: 200px;
+  border-radius: 20px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #eee;
+  transition: background 0.5s;
+  margin-bottom: 32px;      /* folga antes do resultado */
+}
+#compararXml:hover {
+  background-color: rgb(243, 200, 147);
+}
+
+/* Container e estilo do resultado */
+.resultado-container {
+  position: relative;
+  width: 100%;
+}
+.resultado-container #xmlResult {
+  width: 100%;
+  min-height: 150px;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 18px;
+  font-style: italic;
+  color: gray;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-y: auto;
+}
+.drag-area.dragover {
+  background-color: rgba(243, 200, 147, 0.3);
 }

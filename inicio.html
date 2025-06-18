@@ -1,139 +1,140 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Projeto Capta Erros</title>
-    <link rel="stylesheet" href="estilizacao.css" />
-  </head>
-  <body>
-    <div id="divNavegacao">
-    <nav >
-        <ul id="menu">
-          <li id="paraPrimeiro"><a href="inicio.html">Detectar erro</a></li>
-          <li id="paraSegundo"><a href="segundo.html">Comparar XML</a></li>
-        </ul>
-      </nav>
-      </div>
-    <section>
-      <h1>Projeto Capta Erros.</h1>
 
-      <div class="modo-toggle-container">
-        <label class="switch">
-          <input type="checkbox" id="modoToggle" />
-          <span class="slider round"></span>
-        </label>
-        <p id="toggleLabel">Usar modo texto</p>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projeto Capta Erros</title>
+  <link rel="stylesheet" href="estilizacao.css" />
+</head>
 
-      <div id="upload-area">
-        <label for="fileInput" class="custom-file-upload"
-          >Escolher Imagem</label
-        >
-        <input type="file" id="fileInput" accept="image/*" />
-      </div>
-
-      <div id="preview">Nenhuma imagem selecionada.</div>
-      <textarea
-        id="campoTexto"
-        placeholder="Cole aqui a tabela copiada do Excel..."
-        style="display: none"
-      ></textarea>
-      <button id="botaoLimpar">Limpar</button>
-      <button id="analyze">Detectar Erros</button>
-      <div class="resultado-container">
-    <div id="result">Resultado</div>
-    <button id="enviarBanco">Enviar para banco</button>
+<body>
+  <div id="divNavegacao">
+    <nav>
+      <ul id="menu">
+        <li id="paraPrimeiro"><a href="inicio.html">Detectar erro</a></li>
+        <li id="paraSegundo"><a href="segundo.html">Comparar XML</a></li>
+      </ul>
+    </nav>
   </div>
-      <button id="copiarEmail">Copiar texto do e-mail</button>
+  <section>
+    <h1>Projeto Capta Erros.</h1>
 
-      <div id="Formato">
-        <label for="formato1">
-          Formato 1
-          <input
-            type="radio"
-            name="formato"
-            id="formato1"
-            class="formatos"
-            checked
-          />
-        </label>
-        <label for="formato2">
-          Formato 2
-          <input type="radio" name="formato" id="formato2" class="formatos" />
-        </label>
-      </div>
-    </section>
+    <div class="modo-toggle-container">
+      <label class="switch">
+        <input type="checkbox" id="modoToggle" />
+        <span class="slider round"></span>
+      </label>
+      <p id="toggleLabel">Usar modo texto</p>
+    </div>
 
-    <script src="logicaDrag.js"></script>
+    <div id="upload-area">
+      <label for="fileInput" class="custom-file-upload">Escolher Imagem</label>
+      <input type="file" id="fileInput" accept="image/*" />
+    </div>
 
-    <script>
-      const toggle = document.getElementById("modoToggle");
-      const label = document.getElementById("toggleLabel");
-      const areaUpload = document.getElementById("upload-area");
-      const preview = document.getElementById("preview");
-      const campoTexto = document.getElementById("campoTexto");
-      const analyzeBtn = document.getElementById("analyze");
+    <div id="preview">Nenhuma imagem selecionada.</div>
+    <textarea id="campoTexto" placeholder="Cole aqui a tabela copiada do Excel..." style="display: none"></textarea>
+    <button id="botaoLimpar">Limpar</button>
+    <button id="analyze">Detectar Erros</button>
+    <div class="resultado-container">
+      <div id="result">Resultado</div>
+      <button id="enviarBanco">Enviar para banco</button>
+    </div>
+    <button id="copiarEmail">Copiar texto do e-mail</button>
 
-      let modoTextoAtivo = false;
+    <div id="Formato">
+      <label for="formato1">
+        Formato 1
+        <input type="radio" name="formato" id="formato1" class="formatos" checked />
+      </label>
+      <label for="formato2">
+        Formato 2
+        <input type="radio" name="formato" id="formato2" class="formatos" />
+      </label>
+    </div>
+  </section>
 
-      function limparEventosBotaoAnalyze() {
-        const novoBtn = analyzeBtn.cloneNode(true);
-        analyzeBtn.parentNode.replaceChild(novoBtn, analyzeBtn);
-        return novoBtn;
-      }
 
-      toggle.addEventListener("change", () => {
-        if (toggle.checked) {
-          // Modo TEXTO ativado
-          label.textContent = "Usar modo imagem";
-          areaUpload.style.display = "none";
-          preview.style.display = "none";
-          campoTexto.style.display = "block";
-          let limpa = document.getElementById("botaoLimpar");
-          limpa.style.display = "inline-block";
-          limpa.classList.add("botaoLimpaArea");
 
-          modoTextoAtivo = true;
-          const novoBotao = limparEventosBotaoAnalyze();
-          document.getElementById("botaoLimpar").style.display = "inline-block";
-          
-          if (typeof prepararAnaliseTexto === "function") {
-            prepararAnaliseTexto(novoBotao);
-          }
-        } else {
-          // Modo IMAGEM ativado
-          label.textContent = "Usar modo texto";
-          areaUpload.style.display = "block";
-          preview.style.display = "flex";
-          campoTexto.style.display = "none";
-          limpa.style.display = "none";
-          modoTextoAtivo = false;
-          const novoBotao = limparEventosBotaoAnalyze();
-          if (typeof prepararAnalise === "function") {
-            prepararAnalise(novoBotao);
-          }
+
+  <script>
+    const toggle = document.getElementById("modoToggle");
+    const label = document.getElementById("toggleLabel");
+    const areaUpload = document.getElementById("upload-area");
+    const preview = document.getElementById("preview");
+    const campoTexto = document.getElementById("campoTexto");
+    const analyzeBtn = document.getElementById("analyze");
+
+    let modoTextoAtivo = false;
+
+    function limparEventosBotaoAnalyze() {
+      const novoBtn = analyzeBtn.cloneNode(true);
+      analyzeBtn.parentNode.replaceChild(novoBtn, analyzeBtn);
+      return novoBtn;
+    }
+
+    toggle.addEventListener("change", () => {
+      if (toggle.checked) {
+        label.textContent = "Usar modo imagem";
+        areaUpload.style.display = "none";
+        preview.style.display = "none";
+        campoTexto.style.display = "block";
+        let limpa = document.getElementById("botaoLimpar");
+        limpa.style.display = "inline-block";
+        limpa.classList.add("botaoLimpaArea");
+
+        modoTextoAtivo = true;
+        const novoBotao = limparEventosBotaoAnalyze();
+        document.getElementById("botaoLimpar").style.display = "inline-block";
+
+        if (typeof prepararAnaliseTexto === "function") {
+          prepararAnaliseTexto(novoBotao);
         }
-      });
-      // OpenCV para modo imagem
-      Module = {
-        onRuntimeInitialized() {
-          console.log("✅ OpenCV carregado com sucesso!");
-          const script = document.createElement("script");
-          script.src = "detectarErros.js";
-          script.onload = () => {
-            if (typeof prepararAnalise === "function") {
-              prepararAnalise(document.getElementById("analyze"));
-            } else {
-              console.error("❌ prepararAnalise() não foi carregada.");
-            }
-          };
-          document.body.appendChild(script);
-        },
-      };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-    <script src="detectarErrosTexto.js"></script>
-    <script async src="https://docs.opencv.org/4.5.5/opencv.js"></script>
-  </body>
+      } else {
+        label.textContent = "Usar modo texto";
+        areaUpload.style.display = "block";
+        preview.style.display = "flex";
+        campoTexto.style.display = "none";
+        limpa.style.display = "none";
+        modoTextoAtivo = false;
+        const novoBotao = limparEventosBotaoAnalyze();
+        if (typeof prepararAnalise === "function") {
+          prepararAnalise(novoBotao);
+        }
+      }
+    });
+    Module = {
+      onRuntimeInitialized() {
+        console.log("✅ OpenCV carregado com sucesso!");
+        const script = document.createElement("script");
+        script.src = "detectarErros.js";
+        script.onload = () => {
+          if (typeof prepararAnalise === "function") {
+            prepararAnalise(document.getElementById("analyze"));
+          } else {
+            console.error("❌ prepararAnalise() não foi carregada.");
+          }
+        };
+        document.body.appendChild(script);
+      },
+    };
+
+  </script>
+  <script src="logicaDrag.js"></script>
+  <script src="logicaDrag.js"></script>
+<script src="logicaDrag.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    setupDragAndDrop('fileInput', 'preview');
+  });
+</script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+  <script src="detectarErrosTexto.js"></script>
+  <script async src="https://docs.opencv.org/4.5.5/opencv.js"></script>
+</body>
+
 </html>

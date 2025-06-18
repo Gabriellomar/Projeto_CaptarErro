@@ -1,29 +1,62 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparar XML</title>
-    <link rel="stylesheet" href="estilizacao2.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comparar XML</title>
+  <link rel="stylesheet" href="estilizacao2.css">
 </head>
 <body>
-    
-    <nav >
-        <ul id="menu">
-          <li id="paraPrimeiro"><a href="inicio.html">Detectar erro</a></li>
-          <li id="paraSegundo"><a href="segundo.html">Comparar XML</a></li>
-        </ul>
-      </nav>
+  <div id="divNavegacao">
+    <nav>
+      <ul id="menu">
+        <li id="paraPrimeiro"><a href="inicio.html">Detectar erro</a></li>
+        <li id="paraSegundo"><a href="segundo.html">Comparar XML</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <section>
+  <h1>Comparar XML</h1>
+
+  <div class="xml-upload">
+    <!-- XML Emitida -->
+    <div class="drag-container">
+      <label for="xmlEmitida" class="custom-file-upload">XML Emitida</label>
+      <input type="file" id="xmlEmitida" accept=".xml" />
+      <div class="drag-area" id="dropEmitida">
+        Arraste sua XML aqui<br>(ou clique para selecionar)
       </div>
-      <section>
-        <h1>Projeto Capta Erros.</h1>
-        <article id="divXMLs">
-            <p>Insira os arquivos XML para serem processados:</p>
-            <input type="file" name="XML" id="inputXML" accept=".xml" />
-            <div id="XML1" class="geral"></div>
-            <div id="XML2" class="geral"></div>
-        </article>
-      </section>
-      <script src="logicaDrag.js"></script>
+    </div>
+
+    <!-- XML Recebida -->
+    <div class="drag-container">
+      <label for="xmlRecebida" class="custom-file-upload">XML Recebida</label>
+      <input type="file" id="xmlRecebida" accept=".xml" />
+      <div class="drag-area" id="dropRecebida">
+        Arraste sua XML aqui<br>(ou clique para selecionar)
+      </div>
+    </div>
+  </div>
+
+  <button id="compararXml">Comparar XMLs</button>
+
+  <div class="resultado-container">
+    <div id="xmlResult">Resultado da comparação aparecerá aqui.</div>
+  </div>
+</section>
+
+  <script src="logicaDrag.js"></script>
+<script src="logicaDrag.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    setupDragAndDrop('xmlEmitida', 'dropEmitida');
+    setupDragAndDrop('xmlRecebida', 'dropRecebida');
+  });
+</script>
+
+
+
+  <script src="segundo.js"></script>
 </body>
 </html>
