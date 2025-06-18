@@ -108,9 +108,9 @@ function gerarMensagemFormatada(errosPorLinha, errosPorColuna, todasNotas) {
     }
     // Com erros
     let lines = [greeting.trimEnd(),
-      'Identificamos os seguintes erros nas notas fiscais processadas:'];
+      'Identificamos as seguintes divergências nas notas fiscais processadas:'];
     for (const tipo in errosPorColuna) {
-      if (errosPorColuna[tipo] > 0) lines.push(`- ${errosPorColuna[tipo]} erro(s) em ${tipo}`);
+      if (errosPorColuna[tipo] > 0) lines.push(`- ${errosPorColuna[tipo]} divergência(s) em ${tipo}`);
     }
     lines.push('Gentileza revisar os dados enviados.');
     return lines.join('\n');
@@ -136,7 +136,7 @@ function gerarMensagemFormatada(errosPorLinha, errosPorColuna, todasNotas) {
       const count = {};
       erros.forEach(e => count[e] = (count[e] || 0) + 1);
       for (const tipo in count) {
-        lines.push(`    • ${count[tipo]} erro(s) em ${tipo}`);
+        lines.push(`    • ${count[tipo]} divergência(s) em ${tipo}`);
       }
     }
     lines.push('Favor providenciar as correções necessárias.');
